@@ -19,6 +19,7 @@ import { dashboardScenarios } from '../data/dashboardData.js'
 
 function Dashboard() {
   const [scenario, setScenario] = useState('active')
+  const [showAllBadges, setShowAllBadges] = useState(false)
   const student = dashboardScenarios[scenario]
   const progress = Math.round((student.currentDay / student.totalDays) * 100)
   const levelProgress = Math.round((student.xp / student.nextLevelXp) * 100)
@@ -147,7 +148,15 @@ function Dashboard() {
         <Card className="p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-black">Recent badges</h2>
-            <ChevronRight size={18} className="text-[var(--cq-muted)]" />
+            <button
+              type="button"
+              onClick={() => setShowAllBadges((isOpen) => !isOpen)}
+              className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-extrabold text-[var(--cq-brand)] hover:bg-[var(--cq-brand-soft)]"
+              aria-expanded={showAllBadges}
+            >
+              {showAllBadges ? 'Close' : 'View all'}
+              <ChevronRight size={18} className={showAllBadges ? 'rotate-90 transition-transform' : 'transition-transform'} />
+            </button>
           </div>
           <div className="mt-4 flex gap-3">
             {student.achievements.map((achievement) => (
@@ -159,6 +168,25 @@ function Dashboard() {
               </div>
             ))}
           </div>
+          {showAllBadges && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="mt-5 space-y-2 border-t border-[var(--cq-border)] pt-4"
+            >
+              {student.achievements.map((achievement) => (
+                <div key={`${achievement.label}-detail`} className="flex items-center justify-between gap-3 rounded-xl bg-[#f7f7fb] px-3 py-2.5">
+                  <div className="flex items-center gap-2">
+                    {achievement.earned ? <Award size={16} className="text-[var(--cq-success)]" /> : <LockKeyhole size={15} className="text-[#abb0c0]" />}
+                    <span className="text-sm font-bold">{achievement.label}</span>
+                  </div>
+                  <span className={`text-xs font-extrabold ${achievement.earned ? 'text-[var(--cq-success)]' : 'text-[var(--cq-muted)]'}`}>
+                    {achievement.earned ? 'Unlocked' : 'Keep going'}
+                  </span>
+                </div>
+              ))}
+            </motion.div>
+          )}
         </Card>
       </section>
 
