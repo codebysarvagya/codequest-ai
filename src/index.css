@@ -1,0 +1,118 @@
+@import 'tailwindcss';
+
+:root {
+  --cq-ink: #12182a;
+  --cq-muted: #68708a;
+  --cq-canvas: #f7f7fb;
+  --cq-surface: #ffffff;
+  --cq-border: #e4e6ef;
+  --cq-brand: #5957d9;
+  --cq-brand-dark: #4543bc;
+  --cq-brand-soft: #edecff;
+  --cq-success: #1f9d68;
+  --cq-success-soft: #e8f8f0;
+  --cq-warning: #df8b19;
+  --cq-warning-soft: #fff4df;
+  --cq-danger: #d94f61;
+  --cq-radius-sm: 0.75rem;
+  --cq-radius-md: 1rem;
+  --cq-radius-lg: 1.5rem;
+  --cq-shadow-card: 0 10px 30px rgba(18, 24, 42, 0.06);
+  color: var(--cq-ink);
+  background: var(--cq-canvas);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--cq-canvas);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+.cq-page {
+  width: min(100%, 72rem);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+.cq-card {
+  border: 1px solid var(--cq-border);
+  border-radius: var(--cq-radius-md);
+  background: var(--cq-surface);
+  box-shadow: var(--cq-shadow-card);
+}
+
+.cq-button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: var(--cq-radius-sm);
+  padding: 0.625rem 1rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease,
+    color 150ms ease, transform 150ms ease;
+}
+
+.cq-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.cq-button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--cq-brand) 28%, transparent);
+  outline-offset: 2px;
+}
+
+.cq-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.cq-button--primary {
+  color: white;
+  background: var(--cq-brand);
+}
+
+.cq-button--primary:hover:not(:disabled) {
+  background: var(--cq-brand-dark);
+}
+
+.cq-button--secondary {
+  color: var(--cq-brand);
+  border-color: var(--cq-brand-soft);
+  background: var(--cq-brand-soft);
+}
+
+.cq-button--ghost {
+  color: var(--cq-ink);
+  border-color: var(--cq-border);
+  background: var(--cq-surface);
+}
+
+@media (min-width: 640px) {
+  .cq-page {
+    padding: 2rem;
+  }
+}
