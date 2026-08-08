@@ -40,6 +40,12 @@ This project was built through an AI-assisted workflow using Codex/ChatGPT as th
 
 **Result:** Enhanced achievement objects in `dashboardData.js` with description, XP, and condition fields. Converted badge cards into accessible `<button>` components with hover state, added `selectedBadge` state management in `Dashboard.jsx`, and rendered a Framer Motion animated modal dialog.
 
+### 7. Gemini-Powered AI Companion via Serverless API Route
+
+**Prompt intent:** Replace mock AI companion responses with a real Gemini 2.5 Flash API integration using a secure Vercel Serverless Function (`/api/companion`), supporting custom student question prompts while maintaining fallback support for 100% demo uptime.
+
+**Result:** Created `api/companion.js` to process requests via Gemini 2.5 Flash with a Socratic Coding Mentor system prompt, updated `vercel.json` SPA rewrites, updated `AICompanion.jsx` with custom question input and loading states, and passed challenge context from `ChallengeDay.jsx`.
+
 ## Verification performed
 
 After each major implementation phase, the project was checked with:

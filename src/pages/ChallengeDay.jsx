@@ -99,7 +99,7 @@ function ChallengeDay() {
             </ol>
           </Card>
 
-          <AICompanion />
+          <AICompanion taskContext={challengeData} />
         </div>
 
         <aside>
