@@ -34,6 +34,12 @@ This project was built through an AI-assisted workflow using Codex/ChatGPT as th
 
 **Result:** Added a local AI Coding Companion that supplies explanation, roadmap, and hint modes without giving solutions. Added dashboard previews for an active streak, first day with no streak, and return-after-missed-day states.
 
+### 6. Interactive badge details modal
+
+**Prompt intent:** Make individual achievement cards interactive on the dashboard by opening an accessible modal showing badge details, unlock conditions, description, and XP rewards.
+
+**Result:** Enhanced achievement objects in `dashboardData.js` with description, XP, and condition fields. Converted badge cards into accessible `<button>` components with hover state, added `selectedBadge` state management in `Dashboard.jsx`, and rendered a Framer Motion animated modal dialog.
+
 ## Verification performed
 
 After each major implementation phase, the project was checked with:
@@ -44,3 +50,4 @@ npm.cmd run lint
 ```
 
 Both checks passed for the current project state.
+

@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowRight,
   Award,
@@ -10,6 +10,7 @@ import {
   LockKeyhole,
   Medal,
   Sparkles,
+  X,
   Zap,
 } from 'lucide-react'
 import { useState } from 'react'
@@ -20,6 +21,7 @@ import { dashboardScenarios } from '../data/dashboardData.js'
 function Dashboard() {
   const [scenario, setScenario] = useState('active')
   const [showAllBadges, setShowAllBadges] = useState(false)
+  const [selectedBadge, setSelectedBadge] = useState(null)
   const student = dashboardScenarios[scenario]
   const progress = Math.round((student.currentDay / student.totalDays) * 100)
   const levelProgress = Math.round((student.xp / student.nextLevelXp) * 100)
@@ -160,12 +162,26 @@ function Dashboard() {
           </div>
           <div className="mt-4 flex gap-3">
             {student.achievements.map((achievement) => (
-              <div key={achievement.label} className="min-w-0 flex-1 text-center">
-                <span className={`mx-auto grid size-11 place-items-center rounded-2xl ${achievement.earned ? 'bg-[var(--cq-success-soft)] text-[var(--cq-success)]' : 'bg-[#f1f2f7] text-[#abb0c0]'}`}>
+              <button
+                key={achievement.label}
+                type="button"
+                onClick={() => setSelectedBadge(achievement)}
+                className="group min-w-0 flex-1 cursor-pointer text-center focus:outline-none"
+                aria-label={`View details for ${achievement.label}`}
+              >
+                <span
+                  className={`mx-auto grid size-11 place-items-center rounded-2xl transition group-hover:scale-105 ${
+                    achievement.earned
+                      ? 'bg-[var(--cq-success-soft)] text-[var(--cq-success)] group-hover:bg-[#d8f5e5]'
+                      : 'bg-[#f1f2f7] text-[#abb0c0] group-hover:bg-[#e4e6ef]'
+                  }`}
+                >
                   {achievement.earned ? <Award size={21} /> : <LockKeyhole size={18} />}
                 </span>
-                <p className="mt-2 truncate text-xs font-bold text-[var(--cq-muted)]">{achievement.label}</p>
-              </div>
+                <p className="mt-2 truncate text-xs font-bold text-[var(--cq-muted)] transition group-hover:text-[var(--cq-ink)]">
+                  {achievement.label}
+                </p>
+              </button>
             ))}
           </div>
           {showAllBadges && (
@@ -175,20 +191,106 @@ function Dashboard() {
               className="mt-5 space-y-2 border-t border-[var(--cq-border)] pt-4"
             >
               {student.achievements.map((achievement) => (
-                <div key={`${achievement.label}-detail`} className="flex items-center justify-between gap-3 rounded-xl bg-[#f7f7fb] px-3 py-2.5">
+                <button
+                  key={`${achievement.label}-detail`}
+                  type="button"
+                  onClick={() => setSelectedBadge(achievement)}
+                  className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl bg-[#f7f7fb] px-3 py-2.5 text-left transition hover:bg-[#eeeff7]"
+                >
                   <div className="flex items-center gap-2">
-                    {achievement.earned ? <Award size={16} className="text-[var(--cq-success)]" /> : <LockKeyhole size={15} className="text-[#abb0c0]" />}
-                    <span className="text-sm font-bold">{achievement.label}</span>
+                    {achievement.earned ? (
+                      <Award size={16} className="text-[var(--cq-success)]" />
+                    ) : (
+                      <LockKeyhole size={15} className="text-[#abb0c0]" />
+                    )}
+                    <span className="text-sm font-bold text-[var(--cq-ink)]">{achievement.label}</span>
                   </div>
-                  <span className={`text-xs font-extrabold ${achievement.earned ? 'text-[var(--cq-success)]' : 'text-[var(--cq-muted)]'}`}>
+                  <span
+                    className={`text-xs font-extrabold ${
+                      achievement.earned ? 'text-[var(--cq-success)]' : 'text-[var(--cq-muted)]'
+                    }`}
+                  >
                     {achievement.earned ? 'Unlocked' : 'Keep going'}
                   </span>
-                </div>
+                </button>
               ))}
             </motion.div>
           )}
         </Card>
       </section>
+
+      <AnimatePresence>
+        {selectedBadge && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedBadge(null)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              className="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl bg-white p-6 shadow-xl"
+            >
+              <button
+                type="button"
+                onClick={() => setSelectedBadge(null)}
+                className="absolute top-4 right-4 grid size-8 place-items-center rounded-full bg-[#f1f2f7] text-[var(--cq-muted)] transition hover:bg-[#e4e6ef] hover:text-[var(--cq-ink)]"
+                aria-label="Close modal"
+              >
+                <X size={16} />
+              </button>
+
+              <div className="text-center">
+                <span
+                  className={`mx-auto grid size-16 place-items-center rounded-2xl ${
+                    selectedBadge.earned
+                      ? 'bg-[var(--cq-success-soft)] text-[var(--cq-success)]'
+                      : 'bg-[#f1f2f7] text-[#abb0c0]'
+                  }`}
+                >
+                  {selectedBadge.earned ? <Award size={36} /> : <LockKeyhole size={30} />}
+                </span>
+                <span
+                  className={`mt-3 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-extrabold uppercase tracking-wider ${
+                    selectedBadge.earned
+                      ? 'bg-[var(--cq-success-soft)] text-[var(--cq-success)]'
+                      : 'bg-[#f1f2f7] text-[var(--cq-muted)]'
+                  }`}
+                >
+                  {selectedBadge.earned ? 'Unlocked Badge' : 'Locked Badge'}
+                </span>
+                <h3 className="mt-2 text-xl font-black tracking-tight">{selectedBadge.label}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-[var(--cq-muted)]">
+                  {selectedBadge.description}
+                </p>
+              </div>
+
+              <div className="mt-5 space-y-2 rounded-xl bg-[#f7f7fb] p-3.5 text-xs font-bold text-[var(--cq-muted)]">
+                <div className="flex justify-between border-b border-[var(--cq-border)] pb-2">
+                  <span>XP Reward:</span>
+                  <span className="font-extrabold text-[var(--cq-brand)]">{selectedBadge.xp}</span>
+                </div>
+                <div className="flex justify-between pt-1">
+                  <span>Requirement:</span>
+                  <span className="font-extrabold text-[var(--cq-ink)]">{selectedBadge.condition}</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setSelectedBadge(null)}
+                className="mt-5 w-full rounded-xl bg-[var(--cq-brand)] py-2.5 text-sm font-extrabold text-white transition hover:bg-[var(--cq-brand-dark)]"
+              >
+                Got it
+              </button>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-[var(--cq-border)] bg-white/95 px-6 py-3 backdrop-blur sm:hidden" aria-label="Mobile navigation">
         <div className="mx-auto flex max-w-sm items-center justify-around">
@@ -202,3 +304,4 @@ function Dashboard() {
 }
 
 export default Dashboard
+

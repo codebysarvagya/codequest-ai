@@ -1,7 +1,25 @@
 const sharedAchievements = [
-  { label: '7-day fire', earned: true },
-  { label: 'First ship', earned: true },
-  { label: 'Halfway hero', earned: false },
+  {
+    label: '7-day fire',
+    earned: true,
+    description: 'Maintained a coding streak for 7 consecutive days without breaking flow.',
+    xp: '+250 XP',
+    condition: 'Submit proof for 7 consecutive days',
+  },
+  {
+    label: 'First ship',
+    earned: true,
+    description: 'Submitted your first GitHub & LinkedIn proof of work to kickstart your journey.',
+    xp: '+100 XP',
+    condition: 'Complete and submit Day 1 mission',
+  },
+  {
+    label: 'Halfway hero',
+    earned: false,
+    description: 'Reach Day 30 of the 60-day quest with consistent daily progress.',
+    xp: '+1,000 XP',
+    condition: 'Complete 30 challenge days',
+  },
 ]
 
 export const dashboardScenarios = {
@@ -33,7 +51,29 @@ export const dashboardScenarios = {
     standingMessage: 'your quest starts with Day 1',
     levelName: 'Fresh explorer',
     mission: { title: 'Set up your developer profile', duration: '20–30 min', skills: ['GitHub', 'Goals', 'First commit'], description: 'Set a clear baseline for the next 60 days—small, visible, and yours.' },
-    achievements: [{ label: 'First ship', earned: false }, { label: '7-day fire', earned: false }, { label: 'Momentum', earned: false }],
+    achievements: [
+      {
+        label: 'First ship',
+        earned: false,
+        description: 'Submitted your first GitHub & LinkedIn proof of work to kickstart your journey.',
+        xp: '+100 XP',
+        condition: 'Complete and submit Day 1 mission',
+      },
+      {
+        label: '7-day fire',
+        earned: false,
+        description: 'Maintained a coding streak for 7 consecutive days without breaking flow.',
+        xp: '+250 XP',
+        condition: 'Submit proof for 7 consecutive days',
+      },
+      {
+        label: 'Momentum',
+        earned: false,
+        description: 'Build consistent momentum by starting your very first coding mission.',
+        xp: '+150 XP',
+        condition: 'Maintain a 3-day active streak',
+      },
+    ],
   },
   comeback: {
     label: 'After a missed day',
@@ -51,3 +91,4 @@ export const dashboardScenarios = {
     achievements: sharedAchievements,
   },
 }
+
