@@ -29,33 +29,51 @@ Guidance Mode Requested: ${mode}
 Student Question / Context: ${userQuery || mode}
 `
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
+    // Candidate model IDs in order of preference (Flash series)
+    const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
+    let apiResponse = null
+    let lastErrorText = ''
 
-    const apiResponse = await fetch(geminiUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        systemInstruction: {
-          parts: [{ text: systemPrompt }],
-        },
-        contents: [
-          {
-            parts: [{ text: promptText }],
+    for (const model of modelsToTry) {
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`
+      try {
+        const response = await fetch(geminiUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        ],
-        generationConfig: {
-          responseMimeType: 'application/json',
-          temperature: 0.7,
-        },
-      }),
-    })
+          body: JSON.stringify({
+            systemInstruction: {
+              parts: [{ text: systemPrompt }],
+            },
+            contents: [
+              {
+                parts: [{ text: promptText }],
+              },
+            ],
+            generationConfig: {
+              responseMimeType: 'application/json',
+              temperature: 0.7,
+            },
+          }),
+        })
 
-    if (!apiResponse.ok) {
-      const errorText = await apiResponse.text()
-      console.error('Gemini API Error Response:', errorText)
-      return res.status(502).json({ error: 'Gemini API call failed' })
+        if (response.ok) {
+          apiResponse = response
+          break
+        } else {
+          lastErrorText = await response.text()
+          console.warn(`Gemini model ${model} failed with status ${response.status}: ${lastErrorText}`)
+        }
+      } catch (err) {
+        lastErrorText = err.message
+        console.warn(`Fetch error for Gemini model ${model}:`, err)
+      }
+    }
+
+    if (!apiResponse) {
+      console.error('All Gemini API model attempts failed. Last error:', lastErrorText)
+      return res.status(502).json({ error: 'Gemini API call failed', details: lastErrorText })
     }
 
     const data = await apiResponse.json()
@@ -65,10 +83,22 @@ Student Question / Context: ${userQuery || mode}
       return res.status(500).json({ error: 'Empty response received from Gemini' })
     }
 
-    const parsed = JSON.parse(candidateText)
+    // Strip potential markdown code fences (e.g., ```json ... ```)
+    const cleanedText = candidateText.replace(/^```(?:json)?\s*|\s*```$/gi, '').trim()
+
+    let parsed
+    try {
+      parsed = JSON.parse(cleanedText)
+    } catch {
+      parsed = {
+        title: 'CodeQuest AI Guidance',
+        message: cleanedText,
+      }
+    }
+
     return res.status(200).json({
       title: parsed.title || 'CodeQuest AI Guidance',
-      message: parsed.message || candidateText,
+      message: parsed.message || cleanedText,
     })
   } catch (error) {
     console.error('Companion endpoint error:', error)
