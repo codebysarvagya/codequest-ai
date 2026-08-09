@@ -1,59 +1,287 @@
 # AI Usage Log
 
-This project was built through an AI-assisted workflow using Codex/ChatGPT as the implementation partner and VS Code as the local editor.
+This project was developed through an AI-assisted workflow using
+Codex/ChatGPT and Antigravity as development assistants, with VS Code
+used as the local development environment.
 
-## Development record
+AI tools were used for architecture planning, code generation,
+codebase inspection, debugging, API integration, testing,
+documentation, and deployment troubleshooting.
 
-### 1. Project foundation
+All generated changes were reviewed and tested by the team before
+being integrated into the project.
 
-**Prompt intent:** Set up a minimal React + Vite JavaScript project with Tailwind CSS, React Router, Lucide React, Framer Motion, and the routes `/`, `/dashboard`, and `/day/:dayNumber`.
+---
 
-**Result:** Created the application foundation, route configuration, page placeholders, and a scalable `src` folder structure. The project was built and checked locally.
+## Development Record
 
-### 2. Design system
+### 1. Project Foundation
 
-**Prompt intent:** Create a clean, mobile-first visual language for CodeQuest AI without building the final screens yet.
+**AI Assistance:** Codex/ChatGPT + Antigravity
 
-**Result:** Added shared color, spacing, card, button, focus, and responsive layout tokens, along with reusable `Button` and `Card` components.
+**Prompt Intent:**  
+Set up a minimal React + Vite JavaScript project with Tailwind CSS,
+React Router, Lucide React, Framer Motion, and routes for `/`,
+`/dashboard`, and `/day/:dayNumber`.
 
-### 3. Landing page
+**Result:**  
+Created the application foundation, route configuration, page
+placeholders, and scalable `src` folder structure.
 
-**Prompt intent:** Build a motivating landing page for a 60-day coding journey, optimized for a 390px mobile viewport.
+---
 
-**Result:** Added the landing experience, mission preview, XP/streak visual, calls to action, Lucide icons, and restrained Framer Motion transitions.
+### 2. Design System
 
-### 4. Dashboard and challenge experience
+**AI Assistance:** Codex/ChatGPT + Antigravity
 
-**Prompt intent:** Build a realistic student dashboard and a complete challenge-day flow using mock data, including GitHub and LinkedIn proof-of-work fields.
+**Prompt Intent:**  
+Create a clean, mobile-first visual language for CodeQuest AI.
 
-**Result:** Added dashboard progress, XP, badges, a mission CTA, Day 12 content, client-side form validation, and a local success state.
+**Result:**  
+Added shared design tokens, reusable UI components, responsive
+layouts, buttons, cards, focus states, spacing, and visual styling.
 
-### 5. Learning companion and edge cases
+---
 
-**Prompt intent:** Add a thoughtful student-support feature and handle first-day and missed-day states without adding a backend or a paid AI service.
+### 3. Landing Page
 
-**Result:** Added a local AI Coding Companion that supplies explanation, roadmap, and hint modes without giving solutions. Added dashboard previews for an active streak, first day with no streak, and return-after-missed-day states.
+**AI Assistance:** Codex/ChatGPT + Antigravity
 
-### 6. Interactive badge details modal
+**Prompt Intent:**  
+Build a motivating landing page for a 60-day coding journey,
+optimized for mobile and desktop users.
 
-**Prompt intent:** Make individual achievement cards interactive on the dashboard by opening an accessible modal showing badge details, unlock conditions, description, and XP rewards.
+**Result:**  
+Added the landing experience, mission preview, XP/streak visuals,
+calls to action, Lucide icons, and Framer Motion transitions.
 
-**Result:** Enhanced achievement objects in `dashboardData.js` with description, XP, and condition fields. Converted badge cards into accessible `<button>` components with hover state, added `selectedBadge` state management in `Dashboard.jsx`, and rendered a Framer Motion animated modal dialog.
+---
 
-### 7. Gemini-Powered AI Companion via Serverless API Route
+### 4. Dashboard & Challenge Experience
 
-**Prompt intent:** Replace mock AI companion responses with a real Gemini 2.5 Flash API integration using a secure Vercel Serverless Function (`/api/companion`), supporting custom student question prompts while maintaining fallback support for 100% demo uptime.
+**AI Assistance:** Codex/ChatGPT + Antigravity
 
-**Result:** Created `api/companion.js` to process requests via Gemini 2.5 Flash with a Socratic Coding Mentor system prompt, updated `vercel.json` SPA rewrites, updated `AICompanion.jsx` with custom question input and loading states, and passed challenge context from `ChallengeDay.jsx`.
+**Prompt Intent:**  
+Build a realistic student dashboard and complete challenge-day
+experience using structured demo data.
 
-## Verification performed
+**Result:**  
+Added:
 
-After each major implementation phase, the project was checked with:
+- Student progress tracking
+- XP and level progression
+- Current streak
+- Mission progress
+- Achievement badges
+- Mission CTA
+- Challenge Day experience
+- Proof-of-work submission flow
+- Client-side validation
+- Different student-state previews
+
+---
+
+### 5. AI Companion — Initial Version
+
+**AI Assistance:** Codex/ChatGPT + Antigravity
+
+**Prompt Intent:**  
+Add an AI Coding Companion that could guide students through
+coding challenges using explanations, roadmaps, and hints without
+directly providing complete solutions.
+
+**Result:**  
+Initially implemented a local/static AI Companion using predefined
+guidance responses.
+
+This provided a reliable demo fallback while the real AI integration
+was being developed.
+
+---
+
+### 6. Interactive Achievement System
+
+**AI Assistance:** Codex/ChatGPT + Antigravity
+
+**Prompt Intent:**  
+Make achievement badges interactive and provide more information
+about unlocked and locked achievements.
+
+**Result:**  
+Enhanced achievement data with:
+
+- Badge descriptions
+- XP rewards
+- Unlock conditions
+- Locked/unlocked states
+- Interactive badge details
+- Animated modal experience
+
+---
+
+## 7. Real Gemini-Powered AI Companion
+
+**AI Assistance:** Codex/ChatGPT + Antigravity
+
+**Prompt Intent:**  
+Replace the initial static AI responses with a real Gemini-powered
+AI mentor while keeping the API key secure and maintaining a safe
+fallback experience.
+
+**Result:**  
+
+Implemented a Vercel Serverless API route:
+
+`/api/companion`
+
+The architecture became:
+
+Student → React AICompanion → `/api/companion`
+→ Vercel Serverless Function → Gemini API → AI Response
+
+The AI Companion supports:
+
+- Custom student questions
+- Explain Task
+- Roadmap
+- Hint
+- Current challenge context
+- Loading states
+- Socratic mentor instructions
+- Fallback guidance if the API is unavailable
+
+The Gemini API key is stored server-side using the
+`GEMINI_API_KEY` Vercel environment variable.
+
+The key is never exposed in client-side code.
+
+---
+
+## 8. Gemini API Debugging & Deployment
+
+**AI Assistance:** Antigravity
+
+**Prompt Intent:**  
+Debug repeated static responses from the AI Companion after the
+Gemini API integration was deployed.
+
+**Result:**  
+
+Investigated:
+
+- Vercel Serverless Function behaviour
+- Environment variable configuration
+- Gemini API model endpoints
+- HTTP 500/502 errors
+- API request payloads
+- Frontend error handling
+- Vercel deployment behaviour
+
+The frontend was also updated to surface server-side errors instead
+of silently hiding API failures behind the static fallback response.
+
+This made debugging production API issues significantly easier.
+
+---
+
+## 9. Gemini Response Parsing Fix
+
+**AI Assistance:** Antigravity
+
+**Prompt Intent:**  
+Fix cases where Gemini returned valid JSON surrounded by Markdown
+code fences or additional conversational text.
+
+**Result:**  
+
+Improved the response parser to:
+
+- Detect the first `{`
+- Detect the last `}`
+- Extract the JSON object
+- Parse only the required response
+- Remove unnecessary Markdown/code-fence content
+- Provide a safe fallback parser when required
+
+This ensured that users see clean AI guidance instead of raw JSON
+or Markdown formatting.
+
+---
+
+## 10. Final AI Companion
+
+**Result:**  
+
+The final AI Companion provides real AI-generated coding mentorship
+through the Gemini API while preserving the original Socratic mentor
+behaviour.
+
+The mentor is instructed to:
+
+- Explain concepts
+- Break problems into smaller steps
+- Provide hints
+- Provide roadmaps
+- Encourage student reasoning
+- Avoid complete copy-paste solutions
+
+The current implementation is designed specifically for the
+CodeQuest AI student-learning experience.
+
+---
+
+# Why We Used Antigravity
+
+Antigravity was used as an AI development assistant during the
+hackathon because of the limited development time and the need to
+iterate quickly across multiple files.
+
+It helped with:
+
+1. Codebase inspection
+2. Architecture understanding
+3. Implementation planning
+4. Multi-file code changes
+5. React component development
+6. API integration
+7. Gemini API debugging
+8. Vercel Serverless Function implementation
+9. Error diagnosis
+10. Response parsing fixes
+11. Build and lint verification
+12. Deployment troubleshooting
+13. Git workflow assistance
+14. Documentation preparation
+
+Antigravity was not treated as a replacement for development
+understanding. The team reviewed, tested, and validated the generated
+changes before accepting them.
+
+---
+
+# AI Usage Philosophy
+
+AI tools were used to accelerate development while keeping the
+developers involved in:
+
+- Understanding the implementation
+- Reviewing generated changes
+- Testing functionality
+- Debugging issues
+- Making architectural decisions
+- Verifying deployment behaviour
+
+The final project was tested locally and through the deployed
+environment before submission.
+
+---
+
+# Verification Performed
+
+The project was repeatedly verified during development using:
 
 ```powershell
-npm.cmd run build
-npm.cmd run lint
-```
-
-Both checks passed for the current project state.
+npm run build
+npm run lint
+node --check api/companion.js
 
