@@ -29,51 +29,37 @@ Guidance Mode Requested: ${mode}
 Student Question / Context: ${userQuery || mode}
 `
 
-    // Candidate model IDs in order of preference (Flash series)
-    const modelsToTry = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash']
-    let apiResponse = null
-    let lastErrorText = ''
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
 
-    for (const model of modelsToTry) {
-      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`
-      try {
-        const response = await fetch(geminiUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+    const apiResponse = await fetch(geminiUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        systemInstruction: {
+          parts: [{ text: systemPrompt }],
+        },
+        contents: [
+          {
+            parts: [{ text: promptText }],
           },
-          body: JSON.stringify({
-            systemInstruction: {
-              parts: [{ text: systemPrompt }],
-            },
-            contents: [
-              {
-                parts: [{ text: promptText }],
-              },
-            ],
-            generationConfig: {
-              responseMimeType: 'application/json',
-              temperature: 0.7,
-            },
-          }),
-        })
+        ],
+        generationConfig: {
+          responseMimeType: 'application/json',
+          temperature: 0.7,
+        },
+      }),
+    })
 
-        if (response.ok) {
-          apiResponse = response
-          break
-        } else {
-          lastErrorText = await response.text()
-          console.warn(`Gemini model ${model} failed with status ${response.status}: ${lastErrorText}`)
-        }
-      } catch (err) {
-        lastErrorText = err.message
-        console.warn(`Fetch error for Gemini model ${model}:`, err)
-      }
-    }
-
-    if (!apiResponse) {
-      console.error('All Gemini API model attempts failed. Last error:', lastErrorText)
-      return res.status(502).json({ error: 'Gemini API call failed', details: lastErrorText })
+    if (!apiResponse.ok) {
+      const errorText = await apiResponse.text()
+      console.error('Gemini API Error Response:', errorText)
+      return res.status(502).json({
+        error: 'Gemini API call failed',
+        status: apiResponse.status,
+        details: errorText,
+      })
     }
 
     const data = await apiResponse.json()

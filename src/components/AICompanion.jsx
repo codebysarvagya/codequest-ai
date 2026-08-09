@@ -59,19 +59,27 @@ function AICompanion({ taskContext }) {
         }),
       })
 
+      const data = await res.json().catch(() => ({}))
+
       if (!res.ok) {
-        throw new Error(`Server returned ${res.status}`)
+        const detailMsg = data.details || data.error || `HTTP ${res.status}`
+        console.error('AI Companion Server Error:', { status: res.status, error: data.error, details: data.details })
+        setResponse({
+          title: `AI Companion Error (HTTP ${res.status})`,
+          message: detailMsg,
+        })
+        setIsLiveAi(false)
+        return
       }
 
-      const data = await res.json()
       if (data.title && data.message) {
         setResponse({ title: data.title, message: data.message })
         setIsLiveAi(true)
       } else {
-        throw new Error('Invalid response structure')
+        throw new Error('Invalid response structure from server')
       }
-    } catch {
-      // Fall back to static guidance when offline / no API key configured
+    } catch (err) {
+      console.error('AI Companion Fetch Exception:', err)
       const fallback = guidance[mode] || {
         title: 'Socratic Mentor Hint',
         message:
