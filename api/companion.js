@@ -29,7 +29,7 @@ Guidance Mode Requested: ${mode}
 Student Question / Context: ${userQuery || mode}
 `
 
-    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`
+    const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`
 
     const apiResponse = await fetch(geminiUrl, {
       method: 'POST',
@@ -47,7 +47,6 @@ Student Question / Context: ${userQuery || mode}
         ],
         generationConfig: {
           responseMimeType: 'application/json',
-          temperature: 0.7,
         },
       }),
     })

@@ -174,7 +174,7 @@ function AICompanion({ taskContext }) {
         {isLoading ? (
           <div className="flex items-center gap-2.5 py-3 text-xs font-extrabold text-[var(--cq-brand)]">
             <Loader2 size={18} className="animate-spin" />
-            <span>Consulting Gemini 2.5 Flash mentor...</span>
+            <span>Consulting Gemini 3.5 Flash mentor...</span>
           </div>
         ) : (
           <>
