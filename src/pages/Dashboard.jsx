@@ -3,28 +3,52 @@ import {
   ArrowRight,
   Award,
   BookOpen,
+  Calendar,
+  Check,
   ChevronRight,
   CircleCheck,
   Flame,
   Home,
   LockKeyhole,
   Medal,
+  RotateCcw,
   Sparkles,
   X,
   Zap,
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import ThemeToggle from '../components/ThemeToggle.jsx'
 import Card from '../components/ui/Card.jsx'
 import { dashboardScenarios } from '../data/dashboardData.js'
+import { getProgress, resetProgress } from '../utils/progressStore.js'
 
 function Dashboard() {
   const [scenario, setScenario] = useState('active')
   const [showAllBadges, setShowAllBadges] = useState(false)
   const [selectedBadge, setSelectedBadge] = useState(null)
+  const [roadmapFilter, setRoadmapFilter] = useState('all') // 'all' | 'completed' | 'upcoming'
+  const [liveProgress, setLiveProgress] = useState(getProgress)
+
+  useEffect(() => {
+    setLiveProgress(getProgress())
+  }, [scenario])
+
   const student = dashboardScenarios[scenario]
-  const progress = Math.round((student.currentDay / student.totalDays) * 100)
-  const levelProgress = Math.round((student.xp / student.nextLevelXp) * 100)
+  const completedDaysList = liveProgress.completedDays || [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+  const activeDayNumber = Math.max(...completedDaysList, 0) + 1
+  const displayDay = Math.min(activeDayNumber, 60)
+
+  const progress = Math.round((completedDaysList.length / 60) * 100)
+  const totalXp = liveProgress.totalXp || student.xp
+  const levelProgress = Math.min(100, Math.round((totalXp / student.nextLevelXp) * 100))
+
+  function handleReset() {
+    if (window.confirm('Reset local progress back to initial demo state?')) {
+      const reset = resetProgress()
+      setLiveProgress(reset)
+    }
+  }
 
   return (
     <main className="cq-page pb-28">
@@ -35,7 +59,18 @@ function Dashboard() {
           </span>
           CodeQuest <span className="text-[var(--cq-brand)]">AI</span>
         </Link>
-        <span className="grid size-9 place-items-center rounded-full bg-[#edecff] text-sm font-black text-[var(--cq-brand)]">A</span>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            type="button"
+            onClick={handleReset}
+            className="grid size-9 cursor-pointer place-items-center rounded-xl border border-[var(--cq-border)] bg-[var(--cq-surface)] text-[var(--cq-muted)] transition hover:text-[var(--cq-danger)]"
+            title="Reset progress to demo initial state"
+          >
+            <RotateCcw size={16} />
+          </button>
+          <span className="grid size-9 place-items-center rounded-full bg-[var(--cq-brand-soft)] text-sm font-black text-[var(--cq-brand)]">A</span>
+        </div>
       </header>
 
       <section className="mt-8">
@@ -129,6 +164,77 @@ function Dashboard() {
           <Link to={`/day/${student.currentDay}`} className="mt-5 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--cq-brand)] px-4 text-sm font-extrabold text-white transition hover:bg-[var(--cq-brand-dark)]">
             Start mission <ArrowRight size={17} />
           </Link>
+        </Card>
+      </section>
+
+      <section className="mt-7">
+        <Card className="p-5">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[var(--cq-border)]">
+            <div>
+              <h2 className="text-lg font-black tracking-tight flex items-center gap-2">
+                <Calendar size={20} className="text-[var(--cq-brand)]" />
+                60-Day Quest Roadmap Grid
+              </h2>
+              <p className="text-xs font-bold text-[var(--cq-muted)]">
+                {completedDaysList.length} of 60 missions completed
+              </p>
+            </div>
+
+            <div className="flex gap-1.5" role="group" aria-label="Roadmap grid filter">
+              {[
+                { id: 'all', label: 'All 60 Days' },
+                { id: 'completed', label: 'Completed' },
+                { id: 'upcoming', label: 'Upcoming' },
+              ].map((filter) => (
+                <button
+                  key={filter.id}
+                  type="button"
+                  onClick={() => setRoadmapFilter(filter.id)}
+                  className={`rounded-lg px-2.5 py-1 text-xs font-extrabold transition cursor-pointer ${
+                    roadmapFilter === filter.id
+                      ? 'bg-[var(--cq-brand)] text-white'
+                      : 'bg-[var(--cq-canvas)] text-[var(--cq-muted)] hover:bg-[var(--cq-border)]'
+                  }`}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-4 grid grid-cols-6 sm:grid-cols-10 gap-2">
+            {Array.from({ length: 60 }, (_, i) => i + 1)
+              .filter((day) => {
+                if (roadmapFilter === 'completed') return completedDaysList.includes(day)
+                if (roadmapFilter === 'upcoming') return !completedDaysList.includes(day)
+                return true
+              })
+              .map((day) => {
+                const isCompleted = completedDaysList.includes(day)
+                const isActive = day === displayDay
+                return (
+                  <Link
+                    key={day}
+                    to={`/day/${day}`}
+                    className={`relative flex aspect-square flex-col items-center justify-center rounded-xl border text-xs font-black transition ${
+                      isCompleted
+                        ? 'border-[var(--cq-success)] bg-[var(--cq-success-soft)] text-[var(--cq-success)] shadow-xs hover:scale-105'
+                        : isActive
+                        ? 'border-[var(--cq-brand)] bg-[var(--cq-brand-soft)] text-[var(--cq-brand)] ring-2 ring-[var(--cq-brand)] ring-offset-2 hover:scale-105'
+                        : 'border-[var(--cq-border)] bg-[var(--cq-surface)] text-[var(--cq-muted)] opacity-70 hover:opacity-100 hover:border-[var(--cq-brand)]'
+                    }`}
+                    title={`Day ${day} Mission ${isCompleted ? '(Completed)' : isActive ? '(Active Today)' : '(Upcoming)'}`}
+                  >
+                    <span>{day}</span>
+                    {isCompleted ? (
+                      <Check size={12} strokeWidth={3} className="mt-0.5" />
+                    ) : isActive ? (
+                      <span className="mt-0.5 size-1.5 rounded-full bg-[var(--cq-brand)] animate-ping" />
+                    ) : null}
+                  </Link>
+                )
+              })}
+          </div>
         </Card>
       </section>
 

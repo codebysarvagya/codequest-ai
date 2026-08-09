@@ -165,6 +165,29 @@ function AICompanion({ taskContext }) {
         </button>
       </form>
 
+      <div className="mt-2.5 flex flex-wrap gap-1.5 items-center">
+        <span className="text-[11px] font-bold text-[var(--cq-muted)]">Try asking:</span>
+        {[
+          'What is useState?',
+          'How do I filter arrays?',
+          'Mobile layout tips',
+          'Debugging advice',
+        ].map((q) => (
+          <button
+            key={q}
+            type="button"
+            disabled={isLoading}
+            onClick={() => {
+              setCustomQuery(q)
+              handleFetchGuidance('custom', q)
+            }}
+            className="rounded-lg border border-white/80 bg-white/70 px-2.5 py-1 text-[11px] font-bold text-[var(--cq-brand)] transition hover:bg-white cursor-pointer disabled:opacity-50"
+          >
+            {q}
+          </button>
+        ))}
+      </div>
+
       <motion.div
         key={selectedMode + response.title}
         initial={{ opacity: 0, y: 5 }}

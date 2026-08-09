@@ -1,3 +1,4 @@
+import confetti from 'canvas-confetti'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
@@ -14,9 +15,11 @@ import {
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import AICompanion from '../components/AICompanion.jsx'
+import ThemeToggle from '../components/ThemeToggle.jsx'
 import Button from '../components/ui/Button.jsx'
 import Card from '../components/ui/Card.jsx'
 import { challengeData } from '../data/challengeData.js'
+import { completeDayMission } from '../utils/progressStore.js'
 
 function ChallengeDay() {
   const { dayNumber = '12' } = useParams()
@@ -35,22 +38,44 @@ function ChallengeDay() {
 
     setError('')
     setSubmitted(true)
+
+    // Save to local progress store
+    completeDayMission(dayNumber, challengeData.xp, {
+      githubUrl,
+      linkedinUrl,
+      submittedAt: new Date().toISOString(),
+    })
+
+    // Trigger celebratory confetti blast
+    try {
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.55 },
+        colors: ['#5957d9', '#1f9d68', '#df8b19', '#e85d6e'],
+      })
+    } catch {
+      // Ignore confetti errors
+    }
   }
 
   return (
     <main className="cq-page pb-12">
-      <header className="flex items-center gap-3 py-2">
-        <Link
-          to="/dashboard"
-          className="grid size-10 place-items-center rounded-xl border border-[var(--cq-border)] bg-white text-[var(--cq-ink)]"
-          aria-label="Back to dashboard"
-        >
-          <ArrowLeft size={19} />
-        </Link>
-        <div>
-          <p className="text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--cq-muted)]">CodeQuest AI</p>
-          <p className="text-sm font-black">Day {dayNumber} mission</p>
+      <header className="flex items-center justify-between py-2">
+        <div className="flex items-center gap-3">
+          <Link
+            to="/dashboard"
+            className="grid size-10 place-items-center rounded-xl border border-[var(--cq-border)] bg-[var(--cq-surface)] text-[var(--cq-ink)]"
+            aria-label="Back to dashboard"
+          >
+            <ArrowLeft size={19} />
+          </Link>
+          <div>
+            <p className="text-xs font-extrabold uppercase tracking-[0.12em] text-[var(--cq-muted)]">CodeQuest AI</p>
+            <p className="text-sm font-black">Day {dayNumber} mission</p>
+          </div>
         </div>
+        <ThemeToggle />
       </header>
 
       <motion.section

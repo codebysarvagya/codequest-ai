@@ -8,6 +8,7 @@ import {
   Trophy,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import ThemeToggle from '../components/ThemeToggle.jsx'
 import Button from '../components/ui/Button.jsx'
 
 const benefits = [
@@ -26,9 +27,12 @@ function Landing() {
           </span>
           CodeQuest <span className="text-[var(--cq-brand)]">AI</span>
         </Link>
-        <Link to="/dashboard" className="text-sm font-bold text-[var(--cq-muted)]">
-          Preview
-        </Link>
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+          <Link to="/dashboard" className="text-sm font-bold text-[var(--cq-muted)] hover:text-[var(--cq-brand)]">
+            Preview
+          </Link>
+        </div>
       </nav>
 
       <section className="grid items-center gap-10 pb-12 pt-14 md:grid-cols-2 md:py-24">
