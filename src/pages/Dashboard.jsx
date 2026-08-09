@@ -91,11 +91,11 @@ function Dashboard() {
         </motion.h1>
       </section>
 
-      <section className="mt-5 rounded-xl border border-[var(--cq-border)] bg-white p-3" aria-label="Student state preview">
+      <section className="mt-5 rounded-xl border border-[var(--cq-border)] bg-[var(--cq-surface)] p-3" aria-label="Student state preview">
         <p className="text-xs font-extrabold text-[var(--cq-muted)]">Preview real student states</p>
         <div className="mt-2 flex gap-2 overflow-x-auto pb-0.5">
           {Object.entries(dashboardScenarios).map(([key, item]) => (
-            <button key={key} type="button" onClick={() => setScenario(key)} className={`shrink-0 rounded-lg px-3 py-2 text-xs font-extrabold transition ${scenario === key ? 'bg-[var(--cq-brand)] text-white' : 'bg-[#f1f2f7] text-[var(--cq-muted)]'}`}>
+            <button key={key} type="button" onClick={() => setScenario(key)} className={`shrink-0 rounded-lg px-3 py-2 text-xs font-extrabold transition cursor-pointer ${scenario === key ? 'bg-[var(--cq-brand)] text-white' : 'bg-[var(--cq-canvas)] text-[var(--cq-muted)] hover:bg-[var(--cq-border)]'}`}>
               {item.label}
             </button>
           ))}
@@ -121,7 +121,7 @@ function Dashboard() {
               <CircleCheck className="text-[var(--cq-success)]" size={21} />
             </div>
             <p className="mt-4 text-3xl font-black">{progress}%</p>
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#ececf3]">
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--cq-border)]">
               <div className="h-full rounded-full bg-[var(--cq-success)]" style={{ width: `${progress}%` }} />
             </div>
             <p className="mt-2 text-xs font-bold text-[var(--cq-muted)]">Day {student.currentDay} of {student.totalDays}</p>
@@ -158,7 +158,7 @@ function Dashboard() {
           </div>
           <div className="mt-5 flex flex-wrap gap-2">
             {student.mission.skills.map((skill) => (
-              <span key={skill} className="rounded-full bg-[#f1f2f7] px-3 py-1.5 text-xs font-bold text-[var(--cq-muted)]">{skill}</span>
+              <span key={skill} className="rounded-full border border-[var(--cq-border)] bg-[var(--cq-canvas)] px-3 py-1.5 text-xs font-bold text-[var(--cq-muted)]">{skill}</span>
             ))}
           </div>
           <Link to={`/day/${student.currentDay}`} className="mt-5 flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--cq-brand)] px-4 text-sm font-extrabold text-white transition hover:bg-[var(--cq-brand-dark)]">
@@ -278,8 +278,8 @@ function Dashboard() {
                 <span
                   className={`mx-auto grid size-11 place-items-center rounded-2xl transition group-hover:scale-105 ${
                     achievement.earned
-                      ? 'bg-[var(--cq-success-soft)] text-[var(--cq-success)] group-hover:bg-[#d8f5e5]'
-                      : 'bg-[#f1f2f7] text-[#abb0c0] group-hover:bg-[#e4e6ef]'
+                      ? 'bg-[var(--cq-success-soft)] text-[var(--cq-success)]'
+                      : 'bg-[var(--cq-canvas)] text-[var(--cq-muted)]'
                   }`}
                 >
                   {achievement.earned ? <Award size={21} /> : <LockKeyhole size={18} />}
@@ -301,13 +301,13 @@ function Dashboard() {
                   key={`${achievement.label}-detail`}
                   type="button"
                   onClick={() => setSelectedBadge(achievement)}
-                  className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl bg-[#f7f7fb] px-3 py-2.5 text-left transition hover:bg-[#eeeff7]"
+                  className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-xl bg-[var(--cq-canvas)] px-3 py-2.5 text-left transition hover:border-[var(--cq-border)] border border-transparent"
                 >
                   <div className="flex items-center gap-2">
                     {achievement.earned ? (
                       <Award size={16} className="text-[var(--cq-success)]" />
                     ) : (
-                      <LockKeyhole size={15} className="text-[#abb0c0]" />
+                      <LockKeyhole size={15} className="text-[var(--cq-muted)]" />
                     )}
                     <span className="text-sm font-bold text-[var(--cq-ink)]">{achievement.label}</span>
                   </div>
@@ -333,18 +333,18 @@ function Dashboard() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedBadge(null)}
-              className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+              className="fixed inset-0 bg-black/60 backdrop-blur-xs"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 10 }}
-              className="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl bg-white p-6 shadow-xl"
+              className="relative z-10 w-full max-w-sm overflow-hidden rounded-2xl border border-[var(--cq-border)] bg-[var(--cq-surface)] p-6 shadow-xl text-[var(--cq-ink)]"
             >
               <button
                 type="button"
                 onClick={() => setSelectedBadge(null)}
-                className="absolute top-4 right-4 grid size-8 place-items-center rounded-full bg-[#f1f2f7] text-[var(--cq-muted)] transition hover:bg-[#e4e6ef] hover:text-[var(--cq-ink)]"
+                className="absolute top-4 right-4 grid size-8 place-items-center rounded-full bg-[var(--cq-canvas)] text-[var(--cq-muted)] transition hover:text-[var(--cq-ink)]"
                 aria-label="Close modal"
               >
                 <X size={16} />
@@ -355,7 +355,7 @@ function Dashboard() {
                   className={`mx-auto grid size-16 place-items-center rounded-2xl ${
                     selectedBadge.earned
                       ? 'bg-[var(--cq-success-soft)] text-[var(--cq-success)]'
-                      : 'bg-[#f1f2f7] text-[#abb0c0]'
+                      : 'bg-[var(--cq-canvas)] text-[var(--cq-muted)]'
                   }`}
                 >
                   {selectedBadge.earned ? <Award size={36} /> : <LockKeyhole size={30} />}
@@ -364,18 +364,18 @@ function Dashboard() {
                   className={`mt-3 inline-block rounded-full px-2.5 py-0.5 text-[11px] font-extrabold uppercase tracking-wider ${
                     selectedBadge.earned
                       ? 'bg-[var(--cq-success-soft)] text-[var(--cq-success)]'
-                      : 'bg-[#f1f2f7] text-[var(--cq-muted)]'
+                      : 'bg-[var(--cq-canvas)] text-[var(--cq-muted)]'
                   }`}
                 >
                   {selectedBadge.earned ? 'Unlocked Badge' : 'Locked Badge'}
                 </span>
-                <h3 className="mt-2 text-xl font-black tracking-tight">{selectedBadge.label}</h3>
+                <h3 className="mt-2 text-xl font-black tracking-tight text-[var(--cq-ink)]">{selectedBadge.label}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[var(--cq-muted)]">
                   {selectedBadge.description}
                 </p>
               </div>
 
-              <div className="mt-5 space-y-2 rounded-xl bg-[#f7f7fb] p-3.5 text-xs font-bold text-[var(--cq-muted)]">
+              <div className="mt-5 space-y-2 rounded-xl bg-[var(--cq-canvas)] p-3.5 text-xs font-bold text-[var(--cq-muted)] border border-[var(--cq-border)]">
                 <div className="flex justify-between border-b border-[var(--cq-border)] pb-2">
                   <span>XP Reward:</span>
                   <span className="font-extrabold text-[var(--cq-brand)]">{selectedBadge.xp}</span>
@@ -389,7 +389,7 @@ function Dashboard() {
               <button
                 type="button"
                 onClick={() => setSelectedBadge(null)}
-                className="mt-5 w-full rounded-xl bg-[var(--cq-brand)] py-2.5 text-sm font-extrabold text-white transition hover:bg-[var(--cq-brand-dark)]"
+                className="mt-5 w-full cursor-pointer rounded-xl bg-[var(--cq-brand)] py-2.5 text-sm font-extrabold text-white transition hover:bg-[var(--cq-brand-dark)]"
               >
                 Got it
               </button>
@@ -398,7 +398,7 @@ function Dashboard() {
         )}
       </AnimatePresence>
 
-      <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-[var(--cq-border)] bg-white/95 px-6 py-3 backdrop-blur sm:hidden" aria-label="Mobile navigation">
+      <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-[var(--cq-border)] bg-[var(--cq-surface)]/95 px-6 py-3 backdrop-blur sm:hidden" aria-label="Mobile navigation">
         <div className="mx-auto flex max-w-sm items-center justify-around">
           <Link to="/dashboard" className="grid place-items-center gap-1 text-[var(--cq-brand)]"><Home size={20} fill="currentColor" /><span className="text-[10px] font-extrabold">Home</span></Link>
           <Link to={`/day/${student.currentDay}`} className="grid place-items-center gap-1 text-[var(--cq-muted)]"><Zap size={20} /><span className="text-[10px] font-extrabold">Mission</span></Link>

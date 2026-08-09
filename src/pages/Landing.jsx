@@ -112,23 +112,23 @@ function Landing() {
               <span>20%</span>
             </div>
 
-            <div className="mt-6 rounded-2xl bg-[#f7f6ff] p-4">
+            <div className="mt-6 rounded-2xl border border-[var(--cq-border)] bg-[var(--cq-brand-soft)] p-4">
               <div className="flex items-center gap-2 text-sm font-extrabold text-[var(--cq-brand)]">
                 <Sparkles size={16} /> Today&apos;s mission
               </div>
-              <p className="mt-2 text-base font-black">Build a responsive todo app</p>
+              <p className="mt-2 text-base font-black text-[var(--cq-ink)]">Build a responsive todo app</p>
               <p className="mt-1 text-sm leading-5 text-[var(--cq-muted)]">Practice state, filters, and small wins that compound.</p>
             </div>
 
             <div className="mt-4 grid grid-cols-2 gap-3">
-              <div className="rounded-2xl border border-[#ffe5bd] bg-[var(--cq-warning-soft)] p-3">
+              <div className="rounded-2xl border border-[#ffe5bd]/40 bg-[var(--cq-warning-soft)] p-3">
                 <Flame className="text-[var(--cq-warning)]" size={19} fill="currentColor" />
-                <p className="mt-2 text-lg font-black">12 days</p>
+                <p className="mt-2 text-lg font-black text-[var(--cq-ink)]">12 days</p>
                 <p className="text-xs font-semibold text-[var(--cq-muted)]">current streak</p>
               </div>
-              <div className="rounded-2xl border border-[#dcece5] bg-[var(--cq-success-soft)] p-3">
+              <div className="rounded-2xl border border-[#dcece5]/40 bg-[var(--cq-success-soft)] p-3">
                 <span className="text-lg font-black text-[var(--cq-success)]">+120</span>
-                <p className="mt-2 text-lg font-black">1,480 XP</p>
+                <p className="mt-2 text-lg font-black text-[var(--cq-ink)]">1,480 XP</p>
                 <p className="text-xs font-semibold text-[var(--cq-muted)]">earned so far</p>
               </div>
             </div>
@@ -140,7 +140,7 @@ function Landing() {
         <p className="text-center text-xs font-extrabold uppercase tracking-[0.14em] text-[var(--cq-muted)]">Made for student momentum</p>
         <div className="mt-6 grid gap-4 sm:grid-cols-3">
           {benefits.map((benefit) => (
-            <div key={benefit} className="flex items-start gap-3 rounded-2xl bg-white p-4">
+            <div key={benefit} className="flex items-start gap-3 rounded-2xl border border-[var(--cq-border)] bg-[var(--cq-surface)] p-4 shadow-sm">
               <CheckCircle2 className="mt-0.5 shrink-0 text-[var(--cq-success)]" size={19} />
               <p className="text-sm font-bold leading-5 text-[var(--cq-ink)]">{benefit}</p>
             </div>

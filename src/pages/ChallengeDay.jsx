@@ -90,8 +90,8 @@ function ChallengeDay() {
         <p className="mt-4 max-w-2xl text-base leading-7 text-[var(--cq-muted)]">{challengeData.brief}</p>
 
         <div className="mt-5 flex flex-wrap gap-3">
-          <span className="inline-flex items-center gap-2 rounded-xl border border-[var(--cq-border)] bg-white px-3 py-2 text-sm font-bold"><Clock3 size={16} className="text-[var(--cq-brand)]" /> {challengeData.duration}</span>
-          <span className="inline-flex items-center gap-2 rounded-xl border border-[#ffe5bd] bg-[var(--cq-warning-soft)] px-3 py-2 text-sm font-bold"><Zap size={16} className="text-[var(--cq-warning)]" fill="currentColor" /> +{challengeData.xp} XP</span>
+          <span className="inline-flex items-center gap-2 rounded-xl border border-[var(--cq-border)] bg-[var(--cq-surface)] px-3 py-2 text-sm font-bold text-[var(--cq-ink)]"><Clock3 size={16} className="text-[var(--cq-brand)]" /> {challengeData.duration}</span>
+          <span className="inline-flex items-center gap-2 rounded-xl border border-[#ffe5bd]/40 bg-[var(--cq-warning-soft)] px-3 py-2 text-sm font-bold text-[var(--cq-ink)]"><Zap size={16} className="text-[var(--cq-warning)]" fill="currentColor" /> +{challengeData.xp} XP</span>
         </div>
       </motion.section>
 
@@ -100,7 +100,7 @@ function ChallengeDay() {
           <Card className="p-5 sm:p-6">
             <div className="flex items-center gap-2">
               <span className="grid size-9 place-items-center rounded-xl bg-[var(--cq-brand-soft)] text-[var(--cq-brand)]"><CheckCircle2 size={19} /></span>
-              <h2 className="text-lg font-black">By the end, you&apos;ll be able to</h2>
+              <h2 className="text-lg font-black text-[var(--cq-ink)]">By the end, you&apos;ll be able to</h2>
             </div>
             <ul className="mt-5 space-y-4">
               {challengeData.outcomes.map((outcome) => (
@@ -113,11 +113,11 @@ function ChallengeDay() {
           </Card>
 
           <Card className="p-5 sm:p-6">
-            <h2 className="text-lg font-black">A calm way to approach it</h2>
+            <h2 className="text-lg font-black text-[var(--cq-ink)]">A calm way to approach it</h2>
             <ol className="mt-5 space-y-5">
               {challengeData.steps.map((step, index) => (
                 <li key={step} className="flex gap-4">
-                  <span className="grid size-7 shrink-0 place-items-center rounded-full bg-[var(--cq-ink)] text-xs font-black text-white">{index + 1}</span>
+                  <span className="grid size-7 shrink-0 place-items-center rounded-full bg-[var(--cq-brand)] text-xs font-black text-white">{index + 1}</span>
                   <p className="pt-0.5 text-sm leading-6 text-[var(--cq-muted)]">{step}</p>
                 </li>
               ))}
@@ -132,25 +132,25 @@ function ChallengeDay() {
             {submitted ? (
               <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
                 <span className="mx-auto grid size-14 place-items-center rounded-full bg-[var(--cq-success-soft)] text-[var(--cq-success)]"><CheckCircle2 size={30} /></span>
-                <h2 className="mt-4 text-xl font-black">Mission submitted!</h2>
+                <h2 className="mt-4 text-xl font-black text-[var(--cq-ink)]">Mission submitted!</h2>
                 <p className="mt-2 text-sm leading-6 text-[var(--cq-muted)]">Your proof is saved for this demo. You earned +{challengeData.xp} XP.</p>
                 <Link to="/dashboard" className="mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[var(--cq-brand)] px-4 text-sm font-extrabold text-white">Back to dashboard <ArrowLeft size={16} /></Link>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} noValidate>
-                <div className="flex items-center gap-2"><Send size={19} className="text-[var(--cq-brand)]" /><h2 className="text-lg font-black">Submit proof</h2></div>
+                <div className="flex items-center gap-2"><Send size={19} className="text-[var(--cq-brand)]" /><h2 className="text-lg font-black text-[var(--cq-ink)]">Submit proof</h2></div>
                 <p className="mt-2 text-sm leading-6 text-[var(--cq-muted)]">Share your build so your progress is visible and celebrated.</p>
 
-                <label className="mt-5 block text-sm font-extrabold" htmlFor="github-url">GitHub repository or commit</label>
+                <label className="mt-5 block text-sm font-extrabold text-[var(--cq-ink)]" htmlFor="github-url">GitHub repository or commit</label>
                 <div className="relative mt-2">
                   <GitBranch className="pointer-events-none absolute left-3 top-3 text-[var(--cq-muted)]" size={18} />
-                  <input id="github-url" value={githubUrl} onChange={(event) => setGithubUrl(event.target.value)} placeholder="github.com/your-project" className="min-h-11 w-full rounded-xl border border-[var(--cq-border)] bg-white py-2 pl-10 pr-3 text-sm outline-none transition placeholder:text-[#a2a7b8] focus:border-[var(--cq-brand)] focus:ring-3 focus:ring-[#edecff]" />
+                  <input id="github-url" value={githubUrl} onChange={(event) => setGithubUrl(event.target.value)} placeholder="github.com/your-project" className="min-h-11 w-full rounded-xl border border-[var(--cq-border)] bg-[var(--cq-surface)] py-2 pl-10 pr-3 text-sm text-[var(--cq-ink)] outline-none transition placeholder:text-[var(--cq-muted)] focus:border-[var(--cq-brand)] focus:ring-3 focus:ring-[var(--cq-brand-soft)]" />
                 </div>
 
-                <label className="mt-5 block text-sm font-extrabold" htmlFor="linkedin-url">LinkedIn post</label>
+                <label className="mt-5 block text-sm font-extrabold text-[var(--cq-ink)]" htmlFor="linkedin-url">LinkedIn post</label>
                 <div className="relative mt-2">
                   <LinkIcon className="pointer-events-none absolute left-3 top-3 text-[#1578b8]" size={18} />
-                  <input id="linkedin-url" value={linkedinUrl} onChange={(event) => setLinkedinUrl(event.target.value)} placeholder="linkedin.com/posts/..." className="min-h-11 w-full rounded-xl border border-[var(--cq-border)] bg-white py-2 pl-10 pr-3 text-sm outline-none transition placeholder:text-[#a2a7b8] focus:border-[var(--cq-brand)] focus:ring-3 focus:ring-[#edecff]" />
+                  <input id="linkedin-url" value={linkedinUrl} onChange={(event) => setLinkedinUrl(event.target.value)} placeholder="linkedin.com/posts/..." className="min-h-11 w-full rounded-xl border border-[var(--cq-border)] bg-[var(--cq-surface)] py-2 pl-10 pr-3 text-sm text-[var(--cq-ink)] outline-none transition placeholder:text-[var(--cq-muted)] focus:border-[var(--cq-brand)] focus:ring-3 focus:ring-[var(--cq-brand-soft)]" />
                 </div>
 
                 {error && <p className="mt-3 text-sm font-bold text-[var(--cq-danger)]">{error}</p>}

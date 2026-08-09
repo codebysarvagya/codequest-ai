@@ -138,7 +138,7 @@ function AICompanion({ taskContext }) {
               className={`inline-flex min-h-9 items-center gap-1.5 rounded-lg px-3 text-xs font-extrabold transition cursor-pointer disabled:opacity-50 ${
                 isSelected
                   ? 'bg-[var(--cq-brand)] text-white shadow-sm'
-                  : 'bg-white text-[var(--cq-brand)] hover:bg-[#f7f6ff]'
+                  : 'bg-[var(--cq-surface)] text-[var(--cq-brand)] border border-[var(--cq-border)] hover:bg-[var(--cq-canvas)]'
               }`}
             >
               <Icon size={14} /> {item.label}
@@ -153,7 +153,7 @@ function AICompanion({ taskContext }) {
           value={customQuery}
           onChange={(e) => setCustomQuery(e.target.value)}
           placeholder="Ask AI Companion a custom question..."
-          className="min-h-10 flex-1 rounded-xl border border-white/80 bg-white/90 px-3.5 text-xs font-semibold outline-none transition placeholder:text-[var(--cq-muted)] focus:border-[var(--cq-brand)] focus:bg-white"
+          className="min-h-10 flex-1 rounded-xl border border-[var(--cq-border)] bg-[var(--cq-surface)] px-3.5 text-xs font-semibold text-[var(--cq-ink)] outline-none transition placeholder:text-[var(--cq-muted)] focus:border-[var(--cq-brand)]"
         />
         <button
           type="submit"
@@ -181,7 +181,7 @@ function AICompanion({ taskContext }) {
               setCustomQuery(q)
               handleFetchGuidance('custom', q)
             }}
-            className="rounded-lg border border-white/80 bg-white/70 px-2.5 py-1 text-[11px] font-bold text-[var(--cq-brand)] transition hover:bg-white cursor-pointer disabled:opacity-50"
+            className="rounded-lg border border-[var(--cq-border)] bg-[var(--cq-surface)] px-2.5 py-1 text-[11px] font-bold text-[var(--cq-brand)] transition hover:bg-[var(--cq-canvas)] cursor-pointer disabled:opacity-50"
           >
             {q}
           </button>
@@ -192,7 +192,7 @@ function AICompanion({ taskContext }) {
         key={selectedMode + response.title}
         initial={{ opacity: 0, y: 5 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mt-4 rounded-xl border border-white/80 bg-white/70 p-4 relative"
+        className="mt-4 rounded-xl border border-[var(--cq-border)] bg-[var(--cq-surface)] p-4 relative"
       >
         {isLoading ? (
           <div className="flex items-center gap-2.5 py-3 text-xs font-extrabold text-[var(--cq-brand)]">
@@ -202,7 +202,7 @@ function AICompanion({ taskContext }) {
         ) : (
           <>
             <h3 className="text-sm font-black text-[var(--cq-ink)]">{response.title}</h3>
-            <p className="mt-2 text-sm leading-6 text-[#4543a4]">{response.message}</p>
+            <p className="mt-2 text-sm leading-6 text-[var(--cq-ink)]">{response.message}</p>
           </>
         )}
       </motion.div>
