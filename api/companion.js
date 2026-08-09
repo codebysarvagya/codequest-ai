@@ -68,22 +68,55 @@ Student Question / Context: ${userQuery || mode}
       return res.status(500).json({ error: 'Empty response received from Gemini' })
     }
 
-    // Strip potential markdown code fences (e.g., ```json ... ```)
-    const cleanedText = candidateText.replace(/^```(?:json)?\s*|\s*```$/gi, '').trim()
+    let title = 'CodeQuest AI Guidance'
+    let message = ''
 
-    let parsed
-    try {
-      parsed = JSON.parse(cleanedText)
-    } catch {
-      parsed = {
-        title: 'CodeQuest AI Guidance',
-        message: cleanedText,
+    // Extract JSON substring if Gemini included conversational text or markdown code fences
+    const firstBrace = candidateText.indexOf('{')
+    const lastBrace = candidateText.lastIndexOf('}')
+
+    let parseSuccess = false
+
+    if (firstBrace !== -1 && lastBrace > firstBrace) {
+      const jsonCandidate = candidateText.substring(firstBrace, lastBrace + 1)
+      try {
+        const parsed = JSON.parse(jsonCandidate)
+        if (parsed && typeof parsed === 'object') {
+          if (parsed.title) title = String(parsed.title).trim()
+          if (parsed.message) message = String(parsed.message).trim()
+          if (title && message) parseSuccess = true
+        }
+      } catch {
+        // Substring parse failed, proceed to fallback cleaning
+      }
+    }
+
+    // Fallback: If JSON parsing did not extract clean title/message, strip raw JSON/code fence artifacts
+    if (!parseSuccess || !message) {
+      const cleaned = candidateText
+        .replace(/```(?:json)?/gi, '')
+        .replace(/```/g, '')
+        .trim()
+
+      const titleMatch = cleaned.match(/"title"\s*:\s*"([^"]+)"/)
+      const msgMatch = cleaned.match(/"message"\s*:\s*"([^"]+)"/)
+
+      if (titleMatch && titleMatch[1]) {
+        title = titleMatch[1]
+      }
+      if (msgMatch && msgMatch[1]) {
+        message = msgMatch[1]
+      } else {
+        message = cleaned
+          .replace(/^\s*\{[\s\S]*?"message"\s*:\s*"/i, '')
+          .replace(/"\s*\}\s*$/g, '')
+          .trim()
       }
     }
 
     return res.status(200).json({
-      title: parsed.title || 'CodeQuest AI Guidance',
-      message: parsed.message || cleanedText,
+      title: title || 'CodeQuest AI Guidance',
+      message: message || 'Break the problem into smaller steps and proceed carefully.',
     })
   } catch (error) {
     console.error('Companion endpoint error:', error)
